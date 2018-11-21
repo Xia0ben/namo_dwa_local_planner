@@ -34,14 +34,14 @@
 *
 * Author: Eitan Marder-Eppstein
 *********************************************************************/
-#ifndef DWA_LOCAL_PLANNER_DWA_PLANNER_H_
-#define DWA_LOCAL_PLANNER_DWA_PLANNER_H_
+#ifndef NAMODWA_LOCAL_PLANNER_NAMODWA_PLANNER_H_
+#define NAMODWA_LOCAL_PLANNER_NAMODWA_PLANNER_H_
 
 #include <vector>
 #include <Eigen/Core>
 
 
-#include <dwa_local_planner/DWAPlannerConfig.h>
+#include <namo_dwa_local_planner/NAMODWAPlannerConfig.h>
 
 //for creating a local cost grid
 #include <base_local_planner/map_grid_visualizer.h>
@@ -63,30 +63,30 @@
 
 #include <nav_msgs/Path.h>
 
-namespace dwa_local_planner {
+namespace namo_dwa_local_planner {
   /**
-   * @class DWAPlanner
+   * @class NAMODWAPlanner
    * @brief A class implementing a local planner using the Dynamic Window Approach
    */
-  class DWAPlanner {
+  class NAMODWAPlanner {
     public:
       /**
        * @brief  Constructor for the planner
-       * @param name The name of the planner 
+       * @param name The name of the planner
        * @param costmap_ros A pointer to the costmap instance the planner should use
        * @param global_frame the frame id of the tf frame to use
        */
-      DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util);
+      NAMODWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util);
 
       /**
        * @brief  Destructor for the planner
        */
-      ~DWAPlanner() {if(traj_cloud_) delete traj_cloud_;}
+      ~NAMODWAPlanner() {if(traj_cloud_) delete traj_cloud_;}
 
       /**
        * @brief Reconfigures the trajectory planner
        */
-      void reconfigure(DWAPlannerConfig &cfg);
+      void reconfigure(NAMODWAPlannerConfig &cfg);
 
       /**
        * @brief  Check if a trajectory is legal for a position/velocity pair
@@ -102,8 +102,8 @@ namespace dwa_local_planner {
 
       /**
        * @brief Given the current position and velocity of the robot, find the best trajectory to exectue
-       * @param global_pose The current position of the robot 
-       * @param global_vel The current velocity of the robot 
+       * @param global_pose The current position of the robot
+       * @param global_vel The current velocity of the robot
        * @param drive_velocities The velocities to send to the robot base
        * @return The highest scoring trajectory. A cost >= 0 means the trajectory is legal to execute.
        */

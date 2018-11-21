@@ -34,8 +34,8 @@
 *
 * Author: Eitan Marder-Eppstein
 *********************************************************************/
-#ifndef DWA_LOCAL_PLANNER_DWA_PLANNER_ROS_H_
-#define DWA_LOCAL_PLANNER_DWA_PLANNER_ROS_H_
+#ifndef NAMODWA_LOCAL_PLANNER_NAMODWA_PLANNER_ROS_H_
+#define NAMODWA_LOCAL_PLANNER_NAMODWA_PLANNER_ROS_H_
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
@@ -43,7 +43,7 @@
 #include <tf/transform_listener.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <dwa_local_planner/DWAPlannerConfig.h>
+#include <namo_dwa_local_planner/NAMODWAPlannerConfig.h>
 
 #include <angles/angles.h>
 
@@ -55,20 +55,20 @@
 
 #include <base_local_planner/odometry_helper_ros.h>
 
-#include <dwa_local_planner/dwa_planner.h>
+#include <namo_dwa_local_planner/namo_dwa_planner.h>
 
-namespace dwa_local_planner {
+namespace namo_dwa_local_planner {
   /**
-   * @class DWAPlannerROS
-   * @brief ROS Wrapper for the DWAPlanner that adheres to the
+   * @class NAMODWAPlannerROS
+   * @brief ROS Wrapper for the NAMODWAPlanner that adheres to the
    * BaseLocalPlanner interface and can be used as a plugin for move_base.
    */
-  class DWAPlannerROS : public nav_core::BaseLocalPlanner {
+  class NAMODWAPlannerROS : public nav_core::BaseLocalPlanner {
     public:
       /**
-       * @brief  Constructor for DWAPlannerROS wrapper
+       * @brief  Constructor for NAMODWAPlannerROS wrapper
        */
-      DWAPlannerROS();
+      NAMODWAPlannerROS();
 
       /**
        * @brief  Constructs the ros wrapper
@@ -82,7 +82,7 @@ namespace dwa_local_planner {
       /**
        * @brief  Destructor for the wrapper
        */
-      ~DWAPlannerROS();
+      ~NAMODWAPlannerROS();
 
       /**
        * @brief  Given the current position, orientation, and velocity of the robot,
@@ -124,7 +124,7 @@ namespace dwa_local_planner {
       /**
        * @brief Callback to update the local planner's parameters based on dynamic reconfigure
        */
-      void reconfigureCB(DWAPlannerConfig &config, uint32_t level);
+      void reconfigureCB(NAMODWAPlannerConfig &config, uint32_t level);
 
       void publishLocalPlan(std::vector<geometry_msgs::PoseStamped>& path);
 
@@ -137,12 +137,12 @@ namespace dwa_local_planner {
 
       base_local_planner::LocalPlannerUtil planner_util_;
 
-      boost::shared_ptr<DWAPlanner> dp_; ///< @brief The trajectory controller
+      boost::shared_ptr<NAMODWAPlanner> dp_; ///< @brief The trajectory controller
 
       costmap_2d::Costmap2DROS* costmap_ros_;
 
-      dynamic_reconfigure::Server<DWAPlannerConfig> *dsrv_;
-      dwa_local_planner::DWAPlannerConfig default_config_;
+      dynamic_reconfigure::Server<NAMODWAPlannerConfig> *dsrv_;
+      namo_dwa_local_planner::NAMODWAPlannerConfig default_config_;
       bool setup_;
       tf::Stamped<tf::Pose> current_pose_;
 

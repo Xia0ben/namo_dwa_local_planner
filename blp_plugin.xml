@@ -1,7 +1,7 @@
-<library path="lib/libdwa_local_planner">
-  <class name="dwa_local_planner/DWAPlannerROS" type="dwa_local_planner::DWAPlannerROS" base_class_type="nav_core::BaseLocalPlanner">
+<library path="lib/libnamo_dwa_local_planner">
+  <class name="namo_dwa_local_planner/NAMODWAPlannerROS" type="namo_dwa_local_planner::NAMODWAPlannerROS" base_class_type="nav_core::BaseLocalPlanner">
     <description>
-      A implementation of a local planner using either a DWA approach based on configuration parameters.
+      A modified implementation of the DWA approach to local planning adapted for NAMO.
     </description>
   </class>
 </library>

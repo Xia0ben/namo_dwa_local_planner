@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(dwa_local_planner)
+project(namo_dwa_local_planner)
 
 find_package(catkin REQUIRED
         COMPONENTS
@@ -28,12 +28,12 @@ add_definitions(${EIGEN3_DEFINITIONS})
 
 # dynamic reconfigure
 generate_dynamic_reconfigure_options(
-    cfg/DWAPlanner.cfg
+    cfg/NAMODWAPlanner.cfg
 )
 
 catkin_package(
     INCLUDE_DIRS include
-    LIBRARIES dwa_local_planner
+    LIBRARIES namo_dwa_local_planner
     CATKIN_DEPENDS
         dynamic_reconfigure
         nav_msgs
@@ -41,11 +41,11 @@ catkin_package(
         roscpp
 )
 
-add_library(dwa_local_planner src/dwa_planner.cpp src/dwa_planner_ros.cpp)
-add_dependencies(dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(dwa_local_planner ${catkin_LIBRARIES})
+add_library(namo_dwa_local_planner src/namo_dwa_planner.cpp srcnamo_dwa_planner_ros.cpp)
+add_dependencies(namo_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(namo_dwa_local_planner ${catkin_LIBRARIES})
 
-install(TARGETS dwa_local_planner
+install(TARGETS namo_dwa_local_planner
        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        )

@@ -34,7 +34,7 @@
 *
 * Author: Eitan Marder-Eppstein
 *********************************************************************/
-#include <dwa_local_planner/dwa_planner.h>
+#include <namo_dwa_local_planner/namo_dwa_planner.h>
 #include <base_local_planner/goal_functions.h>
 #include <base_local_planner/map_grid_cost_point.h>
 #include <cmath>
@@ -48,8 +48,8 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
-namespace dwa_local_planner {
-  void DWAPlanner::reconfigure(DWAPlannerConfig &config)
+namespace namo_dwa_local_planner {
+  void NAMODWAPlanner::reconfigure(NAMODWAPlannerConfig &config)
   {
 
     boost::mutex::scoped_lock l(configuration_mutex_);
@@ -79,7 +79,7 @@ namespace dwa_local_planner {
     forward_point_distance_ = config.forward_point_distance;
     goal_front_costs_.setXShift(forward_point_distance_);
     alignment_costs_.setXShift(forward_point_distance_);
- 
+
     // obstacle costs can vary due to scaling footprint feature
     obstacle_costs_.setParams(config.max_trans_vel, config.max_scaling_factor, config.scaling_speed);
 
@@ -89,33 +89,33 @@ namespace dwa_local_planner {
     vx_samp = config.vx_samples;
     vy_samp = config.vy_samples;
     vth_samp = config.vth_samples;
- 
+
     if (vx_samp <= 0) {
       ROS_WARN("You've specified that you don't want any samples in the x dimension. We'll at least assume that you want to sample one value... so we're going to set vx_samples to 1 instead");
       vx_samp = 1;
       config.vx_samples = vx_samp;
     }
- 
+
     if (vy_samp <= 0) {
       ROS_WARN("You've specified that you don't want any samples in the y dimension. We'll at least assume that you want to sample one value... so we're going to set vy_samples to 1 instead");
       vy_samp = 1;
       config.vy_samples = vy_samp;
     }
- 
+
     if (vth_samp <= 0) {
       ROS_WARN("You've specified that you don't want any samples in the th dimension. We'll at least assume that you want to sample one value... so we're going to set vth_samples to 1 instead");
       vth_samp = 1;
       config.vth_samples = vth_samp;
     }
- 
+
     vsamples_[0] = vx_samp;
     vsamples_[1] = vy_samp;
     vsamples_[2] = vth_samp;
- 
+
 
   }
 
-  DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util) :
+  NAMODWAPlanner::NAMODWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util) :
       planner_util_(planner_util),
       obstacle_costs_(planner_util->getCostmap()),
       path_costs_(planner_util->getCostmap()),
@@ -154,7 +154,7 @@ namespace dwa_local_planner {
 
 
     private_nh.param("publish_cost_grid_pc", publish_cost_grid_pc_, false);
-    map_viz_.initialize(name, planner_util->getGlobalFrame(), boost::bind(&DWAPlanner::getCellCosts, this, _1, _2, _3, _4, _5, _6));
+    map_viz_.initialize(name, planner_util->getGlobalFrame(), boost::bind(&NAMODWAPlanner::getCellCosts, this, _1, _2, _3, _4, _5, _6));
 
     std::string frame_id;
     private_nh.param("global_frame_id", frame_id, std::string("odom"));
@@ -185,7 +185,7 @@ namespace dwa_local_planner {
   }
 
   // used for visualization only, total_costs are not really total costs
-  bool DWAPlanner::getCellCosts(int cx, int cy, float &path_cost, float &goal_cost, float &occ_cost, float &total_cost) {
+  bool NAMODWAPlanner::getCellCosts(int cx, int cy, float &path_cost, float &goal_cost, float &occ_cost, float &total_cost) {
 
     path_cost = path_costs_.getCellCosts(cx, cy);
     goal_cost = goal_costs_.getCellCosts(cx, cy);
@@ -204,7 +204,7 @@ namespace dwa_local_planner {
     return true;
   }
 
-  bool DWAPlanner::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan) {
+  bool NAMODWAPlanner::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan) {
     oscillation_costs_.resetOscillationFlags();
     return planner_util_->setPlan(orig_global_plan);
   }
@@ -213,7 +213,7 @@ namespace dwa_local_planner {
    * This function is used when other strategies are to be applied,
    * but the cost functions for obstacles are to be reused.
    */
-  bool DWAPlanner::checkTrajectory(
+  bool NAMODWAPlanner::checkTrajectory(
       Eigen::Vector3f pos,
       Eigen::Vector3f vel,
       Eigen::Vector3f vel_samples){
@@ -240,7 +240,7 @@ namespace dwa_local_planner {
   }
 
 
-  void DWAPlanner::updatePlanAndLocalCosts(
+  void NAMODWAPlanner::updatePlanAndLocalCosts(
       tf::Stamped<tf::Pose> global_pose,
       const std::vector<geometry_msgs::PoseStamped>& new_plan) {
     global_plan_.resize(new_plan.size());
@@ -275,7 +275,7 @@ namespace dwa_local_planner {
       sin(angle_to_goal);
 
     goal_front_costs_.setTargetPoses(front_global_plan);
-    
+
     // keeping the nose on the path
     if (sq_dist > forward_point_distance_ * forward_point_distance_ * cheat_factor_) {
       double resolution = planner_util_->getCostmap()->getResolution();
@@ -292,7 +292,7 @@ namespace dwa_local_planner {
   /*
    * given the current state of the robot, find a good trajectory
    */
-  base_local_planner::Trajectory DWAPlanner::findBestPath(
+  base_local_planner::Trajectory NAMODWAPlanner::findBestPath(
       tf::Stamped<tf::Pose> global_pose,
       tf::Stamped<tf::Pose> global_vel,
       tf::Stamped<tf::Pose>& drive_velocities,
