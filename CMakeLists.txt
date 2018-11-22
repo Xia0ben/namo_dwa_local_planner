@@ -13,6 +13,7 @@ find_package(catkin REQUIRED
             pcl_conversions
             roscpp
             tf
+            actionlib_msgs
         )
 
 find_package(Eigen3 REQUIRED)
@@ -31,6 +32,16 @@ generate_dynamic_reconfigure_options(
     cfg/NAMODWAPlanner.cfg
 )
 
+add_action_files(
+    DIRECTORY action
+    FILES
+    FollowPath.action
+)
+
+generate_messages(
+  DEPENDENCIES actionlib_msgs std_msgs nav_msgs geometry_msgs # Or other packages containing msgs
+)
+
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES namo_dwa_local_planner
@@ -39,9 +50,10 @@ catkin_package(
         nav_msgs
         pluginlib
         roscpp
+        actionlib_msgs
 )
 
-add_library(namo_dwa_local_planner src/namo_dwa_planner.cpp srcnamo_dwa_planner_ros.cpp)
+add_library(namo_dwa_local_planner src/namo_dwa_planner.cpp src/namo_dwa_planner_ros.cpp)
 add_dependencies(namo_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(namo_dwa_local_planner ${catkin_LIBRARIES})
 

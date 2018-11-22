@@ -1,0 +1,9 @@
+#goal definition
+nav_msgs/Path path
+bool is_transfer_path
+---
+#result definition
+bool goal_reached
+---
+#feedback
+geometry_msgs/PoseStamped current_subgoal
